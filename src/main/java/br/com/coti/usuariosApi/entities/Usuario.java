@@ -16,6 +16,7 @@ public class Usuario {
 
     @Id
     @Column(name = "ID")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
     @Column(name = "NOME", length = 150, nullable = false)
