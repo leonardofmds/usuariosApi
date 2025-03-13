@@ -12,11 +12,10 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "TB_PERFIL")
+@Table(name = "tb_perfil")
 public class Perfil {
 
     @Id
-    @Column(name = "ID")
     private UUID id;
 
     @Column(name = "NOME", length = 254, nullable = false, unique = true)
