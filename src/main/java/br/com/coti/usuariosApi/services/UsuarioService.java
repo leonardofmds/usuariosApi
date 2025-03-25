@@ -1,6 +1,9 @@
 package br.com.coti.usuariosApi.services;
 
+import br.com.coti.usuariosApi.components.JwtTokenComponent;
 import br.com.coti.usuariosApi.components.SHA256Component;
+import br.com.coti.usuariosApi.dtos.AutenticarUsuarioRequestDto;
+import br.com.coti.usuariosApi.dtos.AutenticarUsuarioResponseDto;
 import br.com.coti.usuariosApi.dtos.CriarUsuarioRequestDto;
 import br.com.coti.usuariosApi.dtos.CriarUsuarioResponseDto;
 import br.com.coti.usuariosApi.entities.Usuario;
@@ -19,6 +22,7 @@ public class UsuarioService {
     @Autowired UsuarioRepository usuarioRepository;
     @Autowired PerfilRepository perfilRepository;
     @Autowired SHA256Component sha256Component;
+    @Autowired JwtTokenComponent jwtTokenComponent;
 
 
     public CriarUsuarioResponseDto criarUsuario(CriarUsuarioRequestDto request){
@@ -39,4 +43,23 @@ public class UsuarioService {
 
         return response;
     }
+
+    public AutenticarUsuarioResponseDto autenticarUsuario(AutenticarUsuarioRequestDto request){
+
+        var usuario = usuarioRepository.findByEmailAndSenha(request.getEmail(), sha256Component.encrypt(request.getSenha()));
+
+        if(usuario == null){
+            throw new IllegalArgumentException("Usuário e/ou senha inválidos.");
+        }
+
+        var response = new AutenticarUsuarioResponseDto();
+        BeanUtils.copyProperties(usuario, response);
+        response.setPerfil(usuario.getPerfil().getNome());
+        response.setToken(jwtTokenComponent.getToken(usuario));
+
+        return response;
+    }
+
+
+
 }

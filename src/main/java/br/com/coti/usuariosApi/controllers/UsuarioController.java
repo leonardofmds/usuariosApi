@@ -1,5 +1,7 @@
 package br.com.coti.usuariosApi.controllers;
 
+import br.com.coti.usuariosApi.dtos.AutenticarUsuarioRequestDto;
+import br.com.coti.usuariosApi.dtos.AutenticarUsuarioResponseDto;
 import br.com.coti.usuariosApi.dtos.CriarUsuarioRequestDto;
 import br.com.coti.usuariosApi.dtos.CriarUsuarioResponseDto;
 import br.com.coti.usuariosApi.services.UsuarioService;
@@ -29,8 +31,9 @@ public class UsuarioController {
 
     @Operation(summary = "Endpoint para autenticar um usuário")
     @PostMapping("/autenticar")
-    public void autenticar(){
-        //TODO
+    public ResponseEntity<AutenticarUsuarioResponseDto> autenticar(@RequestBody @Valid AutenticarUsuarioRequestDto request){
+
+        return ResponseEntity.status(HttpStatus.OK).body(usuarioService.autenticarUsuario(request));
     }
 
 }
